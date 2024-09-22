@@ -5,11 +5,26 @@ import { Input } from "./ui/input"
 import { Textarea } from "./ui/textarea"
 import { Github, Linkedin, Mail, MapPin, Code, Database, Smartphone, Palette, ChevronRight, Moon, Sun } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { useEffect, useState, useRef } from "react"
+import PDFViewer from "./ui/PDFViewer"
 
 export default function Portfolio() {
   const [darkMode, setDarkMode] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [showPDF, setShowPDF] = useState(false)
+  const [formStatus, setFormStatus] = useState<string>('')
+
+  const handleButtonClick = () => {
+    setShowPDF(true);
+  };
+
+  useEffect(() => {
+    if (showPDF) {
+      console.log('PDF Viewer is now visible');
+      // Additional side effects can be handled here when the PDF viewer is shown
+    }
+  }, [showPDF]); // Runs whenever `showPDF` changes
 
   useEffect(() => {
     const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -86,9 +101,9 @@ export default function Portfolio() {
 
   const skills = {
     "Programming Languages": ["C", "C#", "Dart", "Go", "Java", "Javascript", "PHP", "Swift", "Typescript"],
-    "Frontend": ["HTML5", "Vue", "JQuery", "CSS3", "Sass", "Bootstrap", "Webpack", "Babel"],
-    "Backend": ["NodeJS", "Express", "MongoDB", "MySQL", "PostgreSQL", "Firebase", ".NET", "Laravel"],
-    "Mobile": ["Flutter"],
+    "Frontend": ["HTML5", "Vue", "React", "Tailwind", "JQuery", "CSS3", "Sass", "Bootstrap", "Webpack", "Babel"],
+    "Backend": ["NodeJS", "ExpressJS", "MongoDB", "MySQL", "PostgreSQL", "Firebase", ".NET", "Laravel", "Symfony"],
+    "Mobile": ["Flutter", "React Native", "Ionic"],
     "Design": ["Figma", "Sketch", "XD"]
   }
 
@@ -100,6 +115,32 @@ export default function Portfolio() {
     "Design": <Palette className="h-6 w-6" />,
   }
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    try {
+      const response = await fetch('https://formspree.io/f/mwpednjw', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+
+      if (response.ok) {
+        setFormStatus('Thanks for your submission!')
+        form.reset()
+      } else {
+        setFormStatus('Oops! There was a problem submitting your form')
+      }
+    } catch (error) {
+      console.error('Form submission error:', error)
+      setFormStatus('Oops! There was a problem submitting your form')
+    }
+  }
+
   return (
     <div className={`flex flex-col min-h-[100dvh] ${darkMode ? 'dark' : ''}`}>
       <canvas ref={canvasRef} className="fixed inset-0 z-0" />
@@ -107,7 +148,9 @@ export default function Portfolio() {
         <header className="px-4 lg:px-6 h-14 flex items-center">
           <Link className="flex items-center justify-center" href="#">
             <span className="sr-only">El Mahdi Benbrahim</span>
-            <span className="font-bold text-xl">EMB</span>
+            <span className="font-mono text-lg font-bold text-gray-800 dark:text-gray-200 px-2 py-1 rounded">
+              {'</>'}
+            </span>
           </Link>
           <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
             <Link className="text-sm font-medium hover:underline underline-offset-4" href="#about">
@@ -133,9 +176,18 @@ export default function Portfolio() {
             <div className="container mx-auto px-4 md:px-6">
               <div className="flex flex-col items-center space-y-4 text-center">
                 <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none animate-fade-in-up">
-                    El Mahdi Benbrahim
-                  </h1>
+                  <div className="flex flex-col items-center space-y-4">
+                    <Image
+                      src="/images/elmahdibenbrahim.jpeg"
+                      alt="El Mahdi Benbrahim"
+                      width={200}
+                      height={200}
+                      className="rounded-full border-4 border-gray-200 dark:border-gray-700 shadow-lg"
+                    />
+                    <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none animate-fade-in-up">
+                      El Mahdi Benbrahim
+                    </h1>
+                  </div>
                   <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400 animate-fade-in-up animation-delay-200">
                     Software Engineer | Problem Solver | Tech Enthusiast
                   </p>
@@ -153,10 +205,11 @@ export default function Portfolio() {
                   </Link>
                   <Link
                     className="inline-flex h-9 items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus-visible:ring-gray-300"
-                    href="#"
+                    href="#" onClick={handleButtonClick}
                   >
                     View Resume
                   </Link>
+                  {showPDF && <PDFViewer fileUrl="/files/CV_El_Mahdi_BENBRAHIM_FR.pdf" />}
                 </div>
               </div>
             </div>
@@ -208,23 +261,28 @@ export default function Portfolio() {
           <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800" id="contact">
             <div className="container mx-auto px-4 md:px-6">
               <h2 className="text-3xl text-center font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 animate-fade-in-up">Contact Me</h2>
-              <form className="max-w-md mx-auto space-y-4 animate-fade-in-up animation-delay-200">
+              <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4 animate-fade-in-up animation-delay-200">
                 <div className="space-y-2">
                   <label htmlFor="name">Name</label>
-                  <Input id="name" placeholder="Enter your name" required />
+                  <Input id="name" name="name" placeholder="Enter your name" required />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="email">Email</label>
-                  <Input id="email" placeholder="Enter your email" required type="email" />
+                  <Input id="email" name="email" placeholder="Enter your email" required type="email" />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="message">Message</label>
-                  <Textarea className="min-h-[100px]" id="message" placeholder="Enter your message" required />
+                  <Textarea className="min-h-[100px]" id="message" name="message" placeholder="Enter your message" required />
                 </div>
                 <Button type="submit" className="w-full group">
                   Send Message
                   <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
+                {formStatus && (
+                  <p className={`text-center ${formStatus.includes('Oops') ? 'text-red-500' : 'text-green-500'}`}>
+                    {formStatus}
+                  </p>
+                )}
               </form>
             </div>
           </section>
