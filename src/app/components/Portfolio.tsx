@@ -130,7 +130,7 @@ export default function Portfolio() {
         </header>
         <main className="flex-1">
           <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-            <div className="container px-4 md:px-6">
+            <div className="container mx-auto px-4 md:px-6">
               <div className="flex flex-col items-center space-y-4 text-center">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none animate-fade-in-up">
@@ -162,7 +162,7 @@ export default function Portfolio() {
             </div>
           </section>
           <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800" id="about">
-            <div className="container px-4 md:px-6">
+            <div className="container mx-auto px-4 md:px-6">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 animate-fade-in-up">About Me</h2>
               <div className="space-y-4 text-gray-500 md:text-lg dark:text-gray-400 animate-fade-in-up animation-delay-200">
                 <p>
@@ -181,7 +181,7 @@ export default function Portfolio() {
             </div>
           </section>
           <section className="w-full py-12 md:py-24 lg:py-32" id="skills">
-            <div className="container px-4 md:px-6">
+            <div className="container mx-auto px-4 md:px-6">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 animate-fade-in-up">Skills</h2>
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {Object.entries(skills).map(([category, skillList], index) => (
@@ -206,8 +206,8 @@ export default function Portfolio() {
             </div>
           </section>
           <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800" id="contact">
-            <div className="container px-4 md:px-6">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 animate-fade-in-up">Contact Me</h2>
+            <div className="container mx-auto px-4 md:px-6">
+              <h2 className="text-3xl text-center font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 animate-fade-in-up">Contact Me</h2>
               <form className="max-w-md mx-auto space-y-4 animate-fade-in-up animation-delay-200">
                 <div className="space-y-2">
                   <label htmlFor="name">Name</label>
