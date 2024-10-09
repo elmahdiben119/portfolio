@@ -3,7 +3,7 @@
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Textarea } from "./ui/textarea"
-import { Github, Linkedin, Mail, MapPin, Code, Database, Smartphone, Palette, ChevronRight, Moon, Sun, Download, ArrowUp, Phone } from "lucide-react"
+import { Github, Linkedin, Mail, MapPin, Code, Database, Smartphone, Palette, ChevronRight, Moon, Sun, Download, ArrowUp, Phone, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState, useRef } from "react"
@@ -11,6 +11,8 @@ import Head from "next/head"
 import { useCookies } from 'react-cookie'
 
 export default function Portfolio() {
+  const [mounted, setMounted] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
   const [darkMode, setDarkMode] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [formStatus, setFormStatus] = useState<string>('')
@@ -22,12 +24,17 @@ export default function Portfolio() {
     const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
     const savedDarkMode = cookies.darkMode === 'true'
     setDarkMode(savedDarkMode || prefersDarkMode)
-    setShowCookieConsent(cookies.cookieConsent !== 'true')
+    setShowCookieConsent(cookies.cookieConsent === undefined)
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 300)
     }
 
     window.addEventListener('scroll', handleScroll)
+
+    setTimeout(() => {
+      setLoading(false)
+    }, 2000)
+
     return () => window.removeEventListener('scroll', handleScroll)
   }, [cookies.darkMode, cookies.cookieConsent])
 
@@ -159,6 +166,11 @@ export default function Portfolio() {
     })
   }
 
+  const declineCookies = () => {
+    setShowCookieConsent(false)
+    setCookie('cookieConsent', 'false', { path: '/', maxAge: 31536000 }) // 1 year
+  }
+
   const acceptCookies = () => {
     setShowCookieConsent(false)
     setCookie('cookieConsent', 'true', { path: '/', maxAge: 31536000 }) // 1 year
@@ -177,6 +189,36 @@ export default function Portfolio() {
       "https://linkedin.com/in/elmahdibenbrahim"
     ],
     "knowsAbout": Object.values(skills).flat()
+  }
+
+
+  const projects = [
+    {
+      title: "E-commerce Platform",
+      description: "A full-stack e-commerce solution with React, Node.js, and MongoDB.",
+      image: "/placeholder.svg?height=200&width=300",
+      link: "https://github.com/yourusername/ecommerce-platform"
+    },
+    {
+      title: "Task Management App",
+      description: "A React Native mobile app for efficient task management and collaboration.",
+      image: "/placeholder.svg?height=200&width=300",
+      link: "https://github.com/yourusername/task-management-app"
+    },
+    {
+      title: "AI-powered Chatbot",
+      description: "An intelligent chatbot using natural language processing and machine learning.",
+      image: "/placeholder.svg?height=200&width=300",
+      link: "https://github.com/yourusername/ai-chatbot"
+    }
+  ]
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-gray-900">
+        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    )
   }
 
   return (
@@ -312,6 +354,37 @@ export default function Portfolio() {
                 </div>
               </div>
             </section>
+            <section className="w-full py-12 md:py-24 lg:py-32" id="projects">
+              <div className="container px-4 md:px-6">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 animate-fade-in-up">Projects</h2>
+                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                  {projects.map((project, index) => (
+                    <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        width={300}
+                        height={200}
+                        className="w-full h-48 object-cover"
+                      />
+                      <div className="p-6">
+                        <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
+                        <a
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
+                        >
+                          View Project
+                          <ExternalLink className="ml-2 h-4 w-4" />
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
             <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800" id="contact">
               <div className="container mx-auto px-4 md:px-6">
                 <h2 className="text-3xl text-center font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 animate-fade-in-up">Contact Me</h2>
@@ -382,7 +455,7 @@ export default function Portfolio() {
                 <Button onClick={acceptCookies} className="bg-primary text-primary-foreground">
                   Accept
                 </Button>
-                <Button onClick={() => setShowCookieConsent(false)} variant="outline">
+                <Button onClick={declineCookies} variant="outline">
                   Decline
                 </Button>
               </div>
