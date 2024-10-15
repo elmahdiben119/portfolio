@@ -11,7 +11,6 @@ import Head from "next/head"
 import { useCookies } from 'react-cookie'
 
 export default function Portfolio() {
-  const [mounted, setMounted] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [darkMode, setDarkMode] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
