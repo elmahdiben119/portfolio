@@ -11,7 +11,7 @@ import Head from "next/head"
 import { useCookies } from 'react-cookie'
 
 export default function Portfolio() {
-  const [loading, setLoading] = useState<boolean>(true)
+  // const [mounted, setMounted] = useState<boolean>(false)
   const [darkMode, setDarkMode] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [formStatus, setFormStatus] = useState<string>('')
@@ -20,6 +20,7 @@ export default function Portfolio() {
   const [cookies, setCookie] = useCookies(['darkMode', 'cookieConsent'])
 
   useEffect(() => {
+    // setMounted(true)
     const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
     const savedDarkMode = cookies.darkMode === 'true'
     setDarkMode(savedDarkMode || prefersDarkMode)
@@ -29,10 +30,6 @@ export default function Portfolio() {
     }
 
     window.addEventListener('scroll', handleScroll)
-
-    setTimeout(() => {
-      setLoading(false)
-    }, 2000)
 
     return () => window.removeEventListener('scroll', handleScroll)
   }, [cookies.darkMode, cookies.cookieConsent])
@@ -181,8 +178,8 @@ export default function Portfolio() {
     "name": "El Mahdi Benbrahim",
     "jobTitle": "Software Engineer",
     "description": "Passionate software engineer specializing in web development and mobile apps",
-    "image": "https://www.elmahdi-benbrahim.com/profile-image.jpg",
-    "url": "https://www.elmahdi-benbrahim.com",
+    "image": "https://www.elmahdibenbrahim.com/profile-image.jpg",
+    "url": "https://www.elmahdibenbrahim.com",
     "sameAs": [
       "https://github.com/elmahdibenbrahim",
       "https://linkedin.com/in/elmahdibenbrahim"
@@ -193,32 +190,27 @@ export default function Portfolio() {
 
   const projects = [
     {
-      title: "E-commerce Platform",
-      description: "A full-stack e-commerce solution with React, Node.js, and MongoDB.",
-      image: "/placeholder.svg?height=200&width=300",
-      link: "https://github.com/yourusername/ecommerce-platform"
+      title: "LeadGuru",
+      description: "LeadGuru is a platform that can help you manage all leads from various campaigns, keep track of closed/opened ones, and identify your best lead source. It's an all-in-one Platform.",
+      image: "/images/projects/leadguru.png?height=200&width=300",
+      link: "https://www.leadguru.ma/",
+      technologies: ["Laravel", "PHP", "MySQL", "JavaScript"]
     },
     {
-      title: "Task Management App",
+      title: "Alliances Darna",
       description: "A React Native mobile app for efficient task management and collaboration.",
-      image: "/placeholder.svg?height=200&width=300",
-      link: "https://github.com/yourusername/task-management-app"
+      image: "/images/projects/alliancesdarna.png?height=200&width=300",
+      link: "https://alliancesdarna.ma/",
+      technologies: ["React Native", "Redux", "Firebase"]
     },
     {
-      title: "AI-powered Chatbot",
+      title: "Asma Invest",
       description: "An intelligent chatbot using natural language processing and machine learning.",
-      image: "/placeholder.svg?height=200&width=300",
-      link: "https://github.com/yourusername/ai-chatbot"
-    }
+      image: "/images/projects/asmainvest.png?height=200&width=300",
+      link: "https://asmainvest.ma/",
+      technologies: ["Python", "TensorFlow", "NLP"]
+    },
   ]
-
-  if (loading) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-gray-900">
-        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    )
-  }
 
   return (
     <>
@@ -300,7 +292,7 @@ export default function Portfolio() {
                     </Link>
                     <Button
                       onClick={handleDownloadResume}
-                      className="inline-flex h-9 items-center justify-center rounded-md border text-white p-4 border-gray-200 bg-white text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-white dark:focus-visible:ring-gray-300"
+                      className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
                     >
                       <Download className="mr-2 h-3 w-4" />
                       Download Resume
@@ -353,27 +345,36 @@ export default function Portfolio() {
                 </div>
               </div>
             </section>
-            <section className="w-full py-12 md:py-24 lg:py-32" id="projects">
-              <div className="container px-4 md:px-6">
+            <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800" id="projects">
+              <div className="container px-4 md:px-6 mx-auto">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 animate-fade-in-up">Projects</h2>
-                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 justify-center">
                   {projects.map((project, index) => (
-                    <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        width={300}
-                        height={200}
-                        className="w-full h-48 object-cover"
-                      />
+                    <div key={index} className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl animate-fade-in-up" style={{ animationDelay: `${index * 200}ms` }}>
+                      <div className="relative h-48 overflow-hidden">
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          layout="fill"
+                          objectFit="contain"
+                          className="transition-transform duration-300 transform hover:scale-110"
+                        />
+                      </div>
                       <div className="p-6">
                         <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {project.technologies.map((tech, techIndex) => (
+                            <span key={techIndex} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 text-sm rounded-full">
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
                         <a
                           href={project.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
+                          className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 transition-colors duration-200"
                         >
                           View Project
                           <ExternalLink className="ml-2 h-4 w-4" />
@@ -466,6 +467,7 @@ export default function Portfolio() {
   )
 }
 
+
 const keyframes = `
   @keyframes fade-in-up {
     from {
@@ -491,6 +493,30 @@ const styles = `
   }
   .animation-delay-400 {
     animation-delay: 400ms;
+  }
+  .flip-card {
+    perspective: 1000px;
+  }
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+  .flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .flip-card-back {
+    transform: rotateY(180deg);
   }
 `
 
