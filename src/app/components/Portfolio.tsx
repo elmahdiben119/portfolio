@@ -196,20 +196,6 @@ export default function Portfolio() {
       link: "https://www.leadguru.ma/",
       technologies: ["Laravel", "PHP", "MySQL", "JavaScript"]
     },
-    {
-      title: "Alliances Darna",
-      description: "A React Native mobile app for efficient task management and collaboration.",
-      image: "/images/projects/alliancesdarna.png?height=200&width=300",
-      link: "https://alliancesdarna.ma/",
-      technologies: ["React Native", "Redux", "Firebase"]
-    },
-    {
-      title: "Asma Invest",
-      description: "An intelligent chatbot using natural language processing and machine learning.",
-      image: "/images/projects/asmainvest.png?height=200&width=300",
-      link: "https://asmainvest.ma/",
-      technologies: ["Python", "TensorFlow", "NLP"]
-    },
   ]
 
   return (
