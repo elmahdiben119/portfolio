@@ -6,9 +6,10 @@ import { Textarea } from "./ui/textarea"
 import { Github, UserCircle2, Linkedin, Mail, MapPin, Code, Database, Smartphone, Palette, ChevronRight, Moon, Sun, Download, ArrowUp, Phone, ExternalLink, Quote } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, Suspense } from "react"
 import Head from "next/head"
 import { useCookies } from 'react-cookie'
+import { motion } from 'framer-motion'
 
 export default function Portfolio() {
   const [mounted, setMounted] = useState<boolean>(false)
@@ -263,57 +264,53 @@ export default function Portfolio() {
             </nav>
           </header>
           <main className="flex-1">
-            <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-              <div className="container mx-auto px-4 md:px-6">
+            <motion.section
+              className="w-full py-12 md:py-24 lg:py-32 xl:py-48"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <div className="container px-4 md:px-6">
                 <div className="flex flex-col items-center space-y-4 text-center">
-                  <div className="space-y-2">
-                    <div className="flex flex-col items-center space-y-4">
-                      <div className="flip-card w-64 h-64 mb-8">
-                        <div className="flip-card-inner">
-                          <div className="flip-card-front">
-                            <Image
-                              src="/images/elmahdibenbrahim.jpeg"
-                              alt="El Mahdi Benbrahim"
-                              width={256}
-                              height={256}
-                              className="rounded-full"
-                            />
-                          </div>
-                          <div className="flip-card-back bg-gray-800 rounded-full flex items-center justify-center">
-                            <p className="text-white text-lg font-semibold">Hello, I&apos;m El Mahdi!</p>
-                          </div>
-                        </div>
-                      </div>
-                      <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none animate-fade-in-up">
-                        El Mahdi Benbrahim
-                      </h1>
+                  <motion.div
+                    className="space-y-2"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+                  >
+                    <div className="mb-8">
+                      <Image
+                        src="/images/elmahdibenbrahim.jpeg"
+                        alt="El Mahdi Benbrahim"
+                        width={256}
+                        height={256}
+                        className="rounded-full mx-auto"
+                      />
                     </div>
-                    <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400 animate-fade-in-up animation-delay-200">
-                      Software Engineer | Problem Solver | Tech Enthusiast
+                    <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+                      El Mahdi Benbrahim
+                    </h1>
+                    <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+                      Full Stack Developer | React Specialist | Node.js Enthusiast
                     </p>
-                  </div>
-                  <div className="flex items-center space-x-2 text-gray-500 animate-fade-in-up animation-delay-300">
-                    <MapPin className="h-4 w-4" />
-                    <span>Paris, France</span>
-                  </div>
-                  <div className="space-x-4 animate-fade-in-up animation-delay-400">
-                    <Link
-                      className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-                      href="#contact"
-                    >
-                      Contact Me
-                    </Link>
-                    <Button
-                      onClick={handleDownloadResume}
-                      className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-                    >
-                      <Download className="mr-2 h-3 w-4" />
-                      Download Resume
+                  </motion.div>
+                  <motion.div
+                    className="space-x-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
+                  >
+                    <Button onClick={handleDownloadResume} className="bg-primary text-primary-foreground transition-all duration-300 ease-in-out transform hover:scale-105">
+                      Download Resume <Download className="ml-2 h-4 w-4" />
                     </Button>
-                  </div>
+                    <Button variant="outline" className="transition-all duration-300 ease-in-out transform hover:scale-105">
+                      Contact Me
+                    </Button>
+                  </motion.div>
                 </div>
               </div>
-            </section>
+            </motion.section>
+            
             <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800" id="about">
               <div className="container mx-auto px-4 md:px-6">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 animate-fade-in-up">About Me</h2>

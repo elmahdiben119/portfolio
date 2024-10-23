@@ -18,19 +18,12 @@ export const metadata: Metadata = {
     description: 'Explore the projects and skills of El Mahdi Benbrahim, a passionate software engineer.',
     images: [
       {
-        url: 'https://www.elmahdibenbrahim.com/og-image.jpg',
+        url: 'https://www.elmahdibenbrahim.com/_next/image?url=%2Fimages%2Felmahdibenbrahim.jpeg&w=640&q=40',
         width: 1200,
         height: 630,
         alt: 'El Mahdi Benbrahim Portfolio',
       },
     ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'El Mahdi Benbrahim - Software Engineer Portfolio',
-    description: 'Explore the projects and skills of El Mahdi Benbrahim, a passionate software engineer.',
-    images: ['https://www.elmahdibenbrahim.com/twitter-image.jpg'],
-    creator: '@ElMahdiBenbrahim',
   },
   robots: {
     index: true,
