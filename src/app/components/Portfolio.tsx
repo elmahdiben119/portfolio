@@ -270,7 +270,7 @@ export default function Portfolio() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <div className="container px-4 md:px-6">
+              <div className="container mx-auto px-4 md:px-6">
                 <div className="flex flex-col items-center space-y-4 text-center">
                   <motion.div
                     className="space-y-2"
