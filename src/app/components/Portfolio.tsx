@@ -3,7 +3,7 @@
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Textarea } from "./ui/textarea"
-import { Github, Linkedin, Mail, MapPin, Code, Database, Smartphone, Palette, ChevronRight, Moon, Sun, Download, ArrowUp, Phone, ExternalLink } from "lucide-react"
+import { Github, UserCircle2, Linkedin, Mail, MapPin, Code, Database, Smartphone, Palette, ChevronRight, Moon, Sun, Download, ArrowUp, Phone, ExternalLink, Quote } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState, useRef } from "react"
@@ -11,7 +11,7 @@ import Head from "next/head"
 import { useCookies } from 'react-cookie'
 
 export default function Portfolio() {
-  // const [mounted, setMounted] = useState<boolean>(false)
+  const [mounted, setMounted] = useState<boolean>(false)
   const [darkMode, setDarkMode] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [formStatus, setFormStatus] = useState<string>('')
@@ -20,7 +20,7 @@ export default function Portfolio() {
   const [cookies, setCookie] = useCookies(['darkMode', 'cookieConsent'])
 
   useEffect(() => {
-    // setMounted(true)
+    setMounted(true)
     const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
     const savedDarkMode = cookies.darkMode === 'true'
     setDarkMode(savedDarkMode || prefersDarkMode)
@@ -118,6 +118,31 @@ export default function Portfolio() {
     "Design": <Palette className="h-6 w-6" />,
   }
 
+  const testimonials = [
+    {
+      name: "Miri Oussama",
+      position: "Senior Technical Expert @CGI | Scrum, Java, Angular",
+      relationship: "Worked directly with El Mahdi",
+      image: "/placeholder.svg?height=100&width=100",
+      text: "Having a great sense of teamwork, El Mahdi is an enthusiastic, skilled, and hard-working developer. I really enjoyed working with him."
+    },
+    {
+      name: "SAGHOUGH Omar",
+      position: "Assistant Manager Supply Chain at OCP SA",
+      relationship: "Managed El Mahdi directly",
+      image: "/placeholder.svg?height=100&width=100",
+      text: "El Mahdi demonstrated great professionalism in all the tasks entrusted to him during his time in the procurement department."
+    },
+    {
+      name: "Gadrouz Youssef",
+      position: "Scrum Master at Davidson consulting",
+      relationship: "Managed El Mahdi directly",
+      image: "/placeholder.svg?height=100&width=100",
+      text: "Very dedicated and efficient developer."
+    }
+  ]
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
@@ -197,6 +222,8 @@ export default function Portfolio() {
       technologies: ["Laravel", "PHP", "MySQL", "JavaScript"]
     },
   ]
+
+  if (!mounted) return null
 
   return (
     <>
@@ -371,6 +398,30 @@ export default function Portfolio() {
                 </div>
               </div>
             </section>
+
+            <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800" id="testimonials">
+              <div className="container mx-auto px-4 md:px-6">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8">Testimonials</h2>
+                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                  {testimonials.map((testimonial, index) => (
+                    <div key={index} className="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-6">
+                      <div className="flex items-center mb-4">
+                        <UserCircle2 height={60} width={60} className="mr-4" />
+                        <div>
+                          <h3 className="font-semibold text-lg">{testimonial.name}</h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">{testimonial.position}</p>
+                        </div>
+
+                      </div>
+                      <p className="text-gray-600 dark:text-gray-300 mb-4">{testimonial.relationship}</p>
+                      <Quote className="h-6 w-6 text-gray-400 mb-2" />
+                      <p className="text-gray-800 dark:text-gray-200">{testimonial.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
             <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800" id="contact">
               <div className="container mx-auto px-4 md:px-6">
                 <h2 className="text-3xl text-center font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 animate-fade-in-up">Contact Me</h2>
