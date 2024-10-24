@@ -300,11 +300,11 @@ export default function Portfolio() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
                   >
-                    <Button onClick={handleDownloadResume} className="bg-primary text-primary-foreground transition-all duration-300 ease-in-out transform hover:scale-105">
-                      Download Resume <Download className="ml-2 h-4 w-4" />
-                    </Button>
                     <Button variant="outline" className="transition-all duration-300 ease-in-out transform hover:scale-105">
                       Contact Me
+                    </Button>
+                    <Button onClick={handleDownloadResume} className="bg-primary text-primary-foreground transition-all duration-300 ease-in-out transform hover:scale-105">
+                      Download Resume <Download className="ml-2 h-4 w-4" />
                     </Button>
                   </motion.div>
                 </div>
