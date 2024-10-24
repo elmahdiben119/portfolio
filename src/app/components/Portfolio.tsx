@@ -291,7 +291,7 @@ export default function Portfolio() {
                       El Mahdi Benbrahim
                     </h1>
                     <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                      Full Stack Developer | React Specialist | Node.js Enthusiast
+                      Software Engineer | Problem Solver | Tech Enthusiast
                     </p>
                   </motion.div>
                   <motion.div
@@ -310,7 +310,7 @@ export default function Portfolio() {
                 </div>
               </div>
             </motion.section>
-            
+
             <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800" id="about">
               <div className="container mx-auto px-4 md:px-6">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 animate-fade-in-up">About Me</h2>
