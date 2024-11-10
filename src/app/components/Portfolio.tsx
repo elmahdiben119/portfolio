@@ -3,10 +3,10 @@
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Textarea } from "./ui/textarea"
-import { Github, UserCircle2, Linkedin, Mail, MapPin, Code, Database, Smartphone, Palette, ChevronRight, Moon, Sun, Download, ArrowUp, Phone, ExternalLink, Quote } from "lucide-react"
+import { Github, MousePointer, UserCircle2, Linkedin, Mail, Code, Database, Smartphone, Palette, ChevronRight, Moon, Sun, Download, ArrowUp, Phone, ExternalLink, Quote } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { useEffect, useState, useRef, Suspense } from "react"
+import { useEffect, useState, useRef } from "react"
 import Head from "next/head"
 import { useCookies } from 'react-cookie'
 import { motion } from 'framer-motion'
@@ -19,6 +19,7 @@ export default function Portfolio() {
   const [showScrollTop, setShowScrollTop] = useState<boolean>(false)
   const [showCookieConsent, setShowCookieConsent] = useState<boolean>(true)
   const [cookies, setCookie] = useCookies(['darkMode', 'cookieConsent'])
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -143,6 +144,7 @@ export default function Portfolio() {
     }
   ]
 
+  const [displayTexts, setDisplayTexts] = useState<string[]>(testimonials.map(() => ""))
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -198,6 +200,13 @@ export default function Portfolio() {
     setCookie('cookieConsent', 'true', { path: '/', maxAge: 31536000 }) // 1 year
   }
 
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId)
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -214,6 +223,43 @@ export default function Portfolio() {
   }
 
 
+  useEffect(() => {
+    if (hoveredIndex !== null) {
+      const text = testimonials[hoveredIndex].text
+      let i = 0
+      const typingInterval = setInterval(() => {
+        if (i < text.length) {
+          setDisplayTexts(prev => {
+            const newTexts = [...prev]
+            newTexts[hoveredIndex] = text.slice(0, i + 1)
+            return newTexts
+          })
+          i++
+        } else {
+          clearInterval(typingInterval)
+        }
+      }, 50)
+
+      return () => {
+        clearInterval(typingInterval)
+      }
+    }
+  }, [hoveredIndex])
+
+  const handleMouseEnter = (index: number) => {
+    setHoveredIndex(index)
+    setDisplayTexts(prev => {
+      const newTexts = [...prev]
+      newTexts[index] = ""
+      return newTexts
+    })
+  }
+
+  const handleMouseLeave = () => {
+    setHoveredIndex(null)
+    setDisplayTexts(testimonials.map(() => ""))
+  }
+
   const projects = [
     {
       title: "LeadGuru",
@@ -222,6 +268,13 @@ export default function Portfolio() {
       link: "https://www.leadguru.ma/",
       technologies: ["Laravel", "PHP", "MySQL", "JavaScript"]
     },
+    {
+      "title": "Declic Center",
+      "description": "Déclic Center is a business center located in Melun, offering a range of services including business domiciliation, fully-equipped office rentals, and call answering services. Positioned close to Paris, Déclic Center provides companies with a professional address and a variety of flexible options for growing their business.",
+      "image": "/images/projects/decliccenter.svg",
+      "link": "https://www.decliccenter.fr/",
+      "technologies": ["Vue.js", "TypeScript", "Vuetify ", "SCSS"]
+    }
   ]
 
   if (!mounted) return null
@@ -245,15 +298,21 @@ export default function Portfolio() {
               </span>
             </Link>
             <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
-              <Link className="text-sm font-medium hover:underline underline-offset-4" href="#about">
+              <button onClick={() => scrollToSection('about')} className="text-sm font-medium hover:underline underline-offset-4">
                 About
-              </Link>
-              <Link className="text-sm font-medium hover:underline underline-offset-4" href="#skills">
+              </button>
+              <button onClick={() => scrollToSection('skills')} className="text-sm font-medium hover:underline underline-offset-4">
                 Skills
-              </Link>
-              <Link className="text-sm font-medium hover:underline underline-offset-4" href="#contact">
+              </button>
+              <button onClick={() => scrollToSection('projects')} className="text-sm font-medium hover:underline underline-offset-4">
+                Projects
+              </button>
+              <button onClick={() => scrollToSection('testimonials')} className="text-sm font-medium hover:underline underline-offset-4">
+                Testimonials
+              </button>
+              <button onClick={() => scrollToSection('contact')} className="text-sm font-medium hover:underline underline-offset-4">
                 Contact
-              </Link>
+              </button>
               <button
                 onClick={() => setDarkMode(!darkMode)}
                 className="p-2 rounded-full bg-gray-200 dark:bg-gray-800 transition-colors"
@@ -300,7 +359,7 @@ export default function Portfolio() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
                   >
-                    <Button variant="outline" className="transition-all duration-300 ease-in-out transform hover:scale-105">
+                    <Button onClick={() => scrollToSection('contact')} variant="outline" className="transition-all duration-300 ease-in-out transform hover:scale-105">
                       Contact Me
                     </Button>
                     <Button onClick={handleDownloadResume} className="bg-primary text-primary-foreground transition-all duration-300 ease-in-out transform hover:scale-105">
@@ -356,30 +415,35 @@ export default function Portfolio() {
               </div>
             </section>
             <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800" id="projects">
-              <div className="container px-4 md:px-6 mx-auto">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 animate-fade-in-up">Projects</h2>
-                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 justify-center">
+              <div className="container mx-auto px-4 md:px-6">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 text-center">Projects</h2>
+                <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
                   {projects.map((project, index) => (
-                    <div key={index} className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl animate-fade-in-up" style={{ animationDelay: `${index * 200}ms` }}>
-                      <div className="relative h-48 overflow-hidden">
+                    <div key={index} className="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden flex flex-col h-full">
+                      <div className="relative h-48 w-full">
                         <Image
                           src={project.image}
                           alt={project.title}
                           layout="fill"
                           objectFit="contain"
-                          className="transition-transform duration-300 transform hover:scale-110"
+                          className="transition-transform duration-300 transform hover:scale-105 p-6"
                         />
                       </div>
-                      <div className="p-6">
+                      <div className="p-6 flex-grow">
                         <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
                         <div className="flex flex-wrap gap-2 mb-4">
                           {project.technologies.map((tech, techIndex) => (
-                            <span key={techIndex} className="px-2 py-1 bg-gray-200 dark:bg-gray-600 text-sm rounded-full">
+                            <span
+                              key={techIndex}
+                              className="px-2 py-1 bg-gray-200 dark:bg-gray-600 text-sm rounded-full text-gray-700 dark:text-gray-300"
+                            >
                               {tech}
                             </span>
                           ))}
                         </div>
+                      </div>
+                      <div className="p-6 pt-0">
                         <a
                           href={project.link}
                           target="_blank"
@@ -398,25 +462,55 @@ export default function Portfolio() {
 
             <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800" id="testimonials">
               <div className="container mx-auto px-4 md:px-6">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8">Testimonials</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 text-center">Testimonials</h2>
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                   {testimonials.map((testimonial, index) => (
-                    <div key={index} className="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-6">
-                      <div className="flex items-center mb-4">
-                        <UserCircle2 height={60} width={60} className="mr-4" />
+                    <div
+                      key={index}
+                      className={`bg-white dark:bg-gray-700 rounded-lg p-6 transition-all duration-300 ease-in-out ${hoveredIndex === index ? 'shadow-xl -translate-y-1' : 'shadow'
+                        }`}
+                      onMouseEnter={() => handleMouseEnter(index)}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      <div className="flex items-center space-x-4 mb-4">
+                        <UserCircle2 className="h-12 w-12 text-gray-400" />
                         <div>
                           <h3 className="font-semibold text-lg">{testimonial.name}</h3>
                           <p className="text-sm text-gray-600 dark:text-gray-300">{testimonial.position}</p>
                         </div>
-
                       </div>
                       <p className="text-gray-600 dark:text-gray-300 mb-4">{testimonial.relationship}</p>
                       <Quote className="h-6 w-6 text-gray-400 mb-2" />
-                      <p className="text-gray-800 dark:text-gray-200">{testimonial.text}</p>
+                      <div className="relative h-24 overflow-hidden">
+                        {hoveredIndex !== index && (
+                          <div className="absolute inset-0 flex items-center justify-center text-gray-500 dark:text-gray-400">
+                            <MousePointer className="h-5 w-5 mr-2" />
+                            <span>Hover me</span>
+                          </div>
+                        )}
+                        <p
+                          className="text-gray-800 dark:text-gray-200 absolute inset-0"
+                          aria-live="polite"
+                        >
+                          {displayTexts[index]}
+                          {hoveredIndex === index && (
+                            <span className="inline-block w-0.5 h-5 bg-current animate-blink ml-0.5"></span>
+                          )}
+                        </p>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
+              <style jsx>{`
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+        .animate-blink {
+          animation: blink 0.7s step-end infinite;
+        }
+      `}</style>
             </section>
 
             <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800" id="contact">
