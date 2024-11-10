@@ -290,14 +290,14 @@ export default function Portfolio() {
       <div className={`flex flex-col min-h-[100dvh] ${darkMode ? 'dark' : ''}`}>
         <canvas ref={canvasRef} className="fixed inset-0 z-0" />
         <div className="relative z-10 flex flex-col min-h-[100dvh] bg-white bg-opacity-90 dark:bg-gray-900 dark:bg-opacity-90">
-          <header className="px-4 lg:px-6 h-14 flex items-center">
+          <header className="sm:px-1 md:px-4 lg:px-6 h-14 flex items-center">
             <Link className="flex items-center justify-center" href="#">
               <span className="sr-only">El Mahdi Benbrahim</span>
               <span className="font-mono text-lg font-bold text-gray-800 dark:text-gray-200 px-2 py-1 rounded">
                 {'</>'}
               </span>
             </Link>
-            <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
+            <nav className="ml-auto flex gap-2 sm:gap-6 items-center">
               <button onClick={() => scrollToSection('about')} className="text-sm font-medium hover:underline underline-offset-4">
                 About
               </button>
