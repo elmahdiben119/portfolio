@@ -3,7 +3,7 @@
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Textarea } from "./ui/textarea"
-import { Github, MousePointer, UserCircle2, Linkedin, Mail, Code, Database, Smartphone, Palette, ChevronRight, Moon, Sun, Download, ArrowUp, Phone, ExternalLink, Quote } from "lucide-react"
+import { Github, MousePointer, UserCircle2, Linkedin, Mail, Code, Database, Smartphone, Palette, ChevronRight, Moon, Sun, X, Menu, Download, ArrowUp, Phone, ExternalLink, Quote } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState, useRef } from "react"
@@ -20,6 +20,11 @@ export default function Portfolio() {
   const [showCookieConsent, setShowCookieConsent] = useState<boolean>(true)
   const [cookies, setCookie] = useCookies(['darkMode', 'cookieConsent'])
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
   useEffect(() => {
     setMounted(true)
@@ -103,6 +108,58 @@ export default function Portfolio() {
       window.removeEventListener('resize', handleResize)
     }
   }, [darkMode])
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768) // Adjust this breakpoint as needed
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  useEffect(() => {
+    if (activeIndex !== null) {
+      const text = testimonials[activeIndex].text
+      let i = 0
+      const typingInterval = setInterval(() => {
+        if (i < text.length) {
+          setDisplayTexts(prev => {
+            const newTexts = [...prev]
+            newTexts[activeIndex] = text.slice(0, i + 1)
+            return newTexts
+          })
+          i++
+        } else {
+          clearInterval(typingInterval)
+        }
+      }, 50) // Adjust typing speed here
+
+      return () => {
+        clearInterval(typingInterval)
+      }
+    }
+  }, [activeIndex])
+
+  const handleInteraction = (index: number) => {
+    if (isMobile) {
+      setActiveIndex(activeIndex === index ? null : index)
+    } else {
+      setActiveIndex(index)
+    }
+    setDisplayTexts(prev => {
+      const newTexts = [...prev]
+      newTexts[index] = ""
+      return newTexts
+    })
+  }
+
+  const handleMouseLeave = () => {
+    if (!isMobile) {
+      setActiveIndex(null)
+      setDisplayTexts(testimonials.map(() => ""))
+    }
+  }
 
   const skills = {
     "Programming Languages": ["C", "C#", "Dart", "Go", "Java", "Javascript", "PHP", "Swift", "Typescript"],
@@ -205,6 +262,7 @@ export default function Portfolio() {
     if (section) {
       section.scrollIntoView({ behavior: 'smooth' })
     }
+    setIsMenuOpen(false)
   }
 
   const structuredData = {
@@ -246,20 +304,6 @@ export default function Portfolio() {
     }
   }, [hoveredIndex])
 
-  const handleMouseEnter = (index: number) => {
-    setHoveredIndex(index)
-    setDisplayTexts(prev => {
-      const newTexts = [...prev]
-      newTexts[index] = ""
-      return newTexts
-    })
-  }
-
-  const handleMouseLeave = () => {
-    setHoveredIndex(null)
-    setDisplayTexts(testimonials.map(() => ""))
-  }
-
   const projects = [
     {
       title: "LeadGuru",
@@ -290,37 +334,73 @@ export default function Portfolio() {
       <div className={`flex flex-col min-h-[100dvh] ${darkMode ? 'dark' : ''}`}>
         <canvas ref={canvasRef} className="fixed inset-0 z-0" />
         <div className="relative z-10 flex flex-col min-h-[100dvh] bg-white bg-opacity-90 dark:bg-gray-900 dark:bg-opacity-90">
-          <header className="sm:px-1 md:px-4 lg:px-6 h-14 flex items-center">
-            <Link className="flex items-center justify-center" href="#">
-              <span className="sr-only">El Mahdi Benbrahim</span>
-              <span className="font-mono text-lg font-bold text-gray-800 dark:text-gray-200 px-2 py-1 rounded">
-                {'</>'}
-              </span>
-            </Link>
-            <nav className="ml-auto flex gap-2 sm:gap-6 items-center">
-              <button onClick={() => scrollToSection('about')} className="text-sm font-medium hover:underline underline-offset-4">
-                About
-              </button>
-              <button onClick={() => scrollToSection('skills')} className="text-sm font-medium hover:underline underline-offset-4">
-                Skills
-              </button>
-              <button onClick={() => scrollToSection('projects')} className="text-sm font-medium hover:underline underline-offset-4">
-                Projects
-              </button>
-              <button onClick={() => scrollToSection('testimonials')} className="text-sm font-medium hover:underline underline-offset-4">
-                Testimonials
-              </button>
-              <button onClick={() => scrollToSection('contact')} className="text-sm font-medium hover:underline underline-offset-4">
-                Contact
-              </button>
-              <button
-                onClick={() => setDarkMode(!darkMode)}
-                className="p-2 rounded-full bg-gray-200 dark:bg-gray-800 transition-colors"
-                aria-label="Toggle dark mode"
-              >
-                {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </button>
-            </nav>
+          <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md">
+            <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+              <Link className="flex items-center justify-center" href="#">
+                <span className="sr-only">El Mahdi Benbrahim</span>
+                <span className="font-mono text-lg font-bold text-gray-800 dark:text-gray-200 px-2 py-1 rounded">
+                  {'</>'}
+                </span>
+              </Link>
+              <nav className="hidden md:flex gap-6 items-center">
+                <button onClick={() => scrollToSection('about')} className="text-sm font-medium hover:underline underline-offset-4">
+                  About
+                </button>
+                <button onClick={() => scrollToSection('skills')} className="text-sm font-medium hover:underline underline-offset-4">
+                  Skills
+                </button>
+                <button onClick={() => scrollToSection('projects')} className="text-sm font-medium hover:underline underline-offset-4">
+                  Projects
+                </button>
+                <button onClick={() => scrollToSection('testimonials')} className="text-sm font-medium hover:underline underline-offset-4">
+                  Testimonials
+                </button>
+                <button onClick={() => scrollToSection('contact')} className="text-sm font-medium hover:underline underline-offset-4">
+                  Contact
+                </button>
+              </nav>
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setDarkMode(!darkMode)}
+                  className="rounded-full"
+                  aria-label="Toggle dark mode"
+                >
+                  {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden"
+                  onClick={toggleMenu}
+                  aria-label="Toggle menu"
+                >
+                  {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                </Button>
+              </div>
+            </div>
+            {isMenuOpen && (
+              <nav className="md:hidden bg-white dark:bg-gray-900 py-4">
+                <div className="container mx-auto px-4 flex flex-col gap-4">
+                  <button onClick={() => scrollToSection('about')} className="text-sm font-medium hover:underline underline-offset-4">
+                    About
+                  </button>
+                  <button onClick={() => scrollToSection('skills')} className="text-sm font-medium hover:underline underline-offset-4">
+                    Skills
+                  </button>
+                  <button onClick={() => scrollToSection('projects')} className="text-sm font-medium hover:underline underline-offset-4">
+                    Projects
+                  </button>
+                  <button onClick={() => scrollToSection('testimonials')} className="text-sm font-medium hover:underline underline-offset-4">
+                    Testimonials
+                  </button>
+                  <button onClick={() => scrollToSection('contact')} className="text-sm font-medium hover:underline underline-offset-4">
+                    Contact
+                  </button>
+                </div>
+              </nav>
+            )}
           </header>
           <main className="flex-1">
             <motion.section
@@ -467,10 +547,20 @@ export default function Portfolio() {
                   {testimonials.map((testimonial, index) => (
                     <div
                       key={index}
-                      className={`bg-white dark:bg-gray-700 rounded-lg p-6 transition-all duration-300 ease-in-out ${hoveredIndex === index ? 'shadow-xl -translate-y-1' : 'shadow'
+                      className={`bg-white dark:bg-gray-700 rounded-lg p-6 transition-all duration-300 ease-in-out ${activeIndex === index ? 'shadow-xl -translate-y-1' : 'shadow'
                         }`}
-                      onMouseEnter={() => handleMouseEnter(index)}
+                      onMouseEnter={() => !isMobile && handleInteraction(index)}
                       onMouseLeave={handleMouseLeave}
+                      onClick={() => isMobile && handleInteraction(index)}
+                      tabIndex={0}
+                      role="button"
+                      aria-expanded={activeIndex === index}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          handleInteraction(index)
+                        }
+                      }}
                     >
                       <div className="flex items-center space-x-4 mb-4">
                         <UserCircle2 className="h-12 w-12 text-gray-400" />
@@ -482,10 +572,10 @@ export default function Portfolio() {
                       <p className="text-gray-600 dark:text-gray-300 mb-4">{testimonial.relationship}</p>
                       <Quote className="h-6 w-6 text-gray-400 mb-2" />
                       <div className="relative h-24 overflow-hidden">
-                        {hoveredIndex !== index && (
+                        {activeIndex !== index && (
                           <div className="absolute inset-0 flex items-center justify-center text-gray-500 dark:text-gray-400">
                             <MousePointer className="h-5 w-5 mr-2" />
-                            <span>Hover me</span>
+                            <span>{isMobile ? "Tap to read" : "Hover to read"}</span>
                           </div>
                         )}
                         <p
@@ -493,7 +583,7 @@ export default function Portfolio() {
                           aria-live="polite"
                         >
                           {displayTexts[index]}
-                          {hoveredIndex === index && (
+                          {activeIndex === index && (
                             <span className="inline-block w-0.5 h-5 bg-current animate-blink ml-0.5"></span>
                           )}
                         </p>
