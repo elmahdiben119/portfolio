@@ -334,7 +334,7 @@ export default function Portfolio() {
       <div className={`flex flex-col min-h-[100dvh] ${darkMode ? 'dark' : ''}`}>
         <canvas ref={canvasRef} className="fixed inset-0 z-0" />
         <div className="relative z-10 flex flex-col min-h-[100dvh] bg-white bg-opacity-90 dark:bg-gray-900 dark:bg-opacity-90">
-          <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md">
+          <header className="bg-transparent">
             <div className="container mx-auto px-4 h-16 flex items-center justify-between">
               <Link className="flex items-center justify-center" href="#">
                 <span className="sr-only">El Mahdi Benbrahim</span>
@@ -381,7 +381,7 @@ export default function Portfolio() {
               </div>
             </div>
             {isMenuOpen && (
-              <nav className="md:hidden bg-white dark:bg-gray-900 py-4">
+              <nav className="md:hidden bg-white dark:bg-gray-900 absolute w-full z-50 py-4">
                 <div className="container mx-auto px-4 flex flex-col gap-4">
                   <button onClick={() => scrollToSection('about')} className="text-sm font-medium hover:underline underline-offset-4">
                     About
