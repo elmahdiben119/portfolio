@@ -95,8 +95,8 @@ export default function RootLayout({
         </noscript>
         {children}
         {deferredPrompt && (
-          <Button onClick={handleInstallClick} className="fixed bottom-4 right-4">
-            Install App
+          <Button onClick={handleInstallClick} className="fixed bottom-4 right-4 z-50">
+            Install
           </Button>
         )}
       </body>
