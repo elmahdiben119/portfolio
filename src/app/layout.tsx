@@ -1,14 +1,11 @@
-'use client'
-
-import React from 'react'
-import './globals.css'
+import React from 'react';
+import './globals.css';
 import Script from 'next/script';
-import { useState, useEffect } from 'react'
-import { Button } from './components/ui/button'
-import { Metadata } from "next";
+import { Button } from './components/ui/button';
+
 const GTM_ID = 'GTM-TRRM5VK4';
 
-const metadata: Metadata = {
+export const metadata = {
   title: 'El Mahdi Benbrahim',
   description: 'El Mahdi Benbrahim is a software engineer specializing in web development, mobile apps, and problem-solving. Explore his skills and projects.',
   keywords: 'El Mahdi Benbrahim, software engineer, web development, mobile apps, React, Vue, Node.js, TypeScript',
@@ -39,72 +36,13 @@ const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-}
+};
 
-export default function RootLayout({
-  children,
-  metadata
-}: {
-  children: React.ReactNode,
-  metadata: Metadata
-}) {
-
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "El Mahdi Benbrahim",
-    "url": "https://www.elmahdibenbrahim.com/",
-    "image": "https://www.elmahdibenbrahim.com/_next/image?url=%2Fimages%2Felmahdibenbrahim.jpeg&w=640&q=75",
-    "jobTitle": "Software Engineer",
-    "worksFor": {
-      "@type": "Company",
-      "name": "Smart4 Engineering",
-    },
-    "sameAs": [
-      "https://www.linkedin.com/in/benbrahimelmahdi/",
-      "https://github.com/elmahdiben119",
-      "https://x.com/MahdiBenbrahim1"
-    ]
-  };
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      e.preventDefault()
-      setDeferredPrompt(e)
-    }
-
-    window.addEventListener('beforeinstallprompt', handler)
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handler)
-    }
-  }, [])
-
-  const handleInstallClick = () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt()
-      deferredPrompt.userChoice.then((choiceResult: { outcome: string }) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt')
-        } else {
-          console.log('User dismissed the install prompt')
-        }
-        setDeferredPrompt(null)
-      })
-    }
-  }
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        {/* Metadata */}
-        <Script
-          id="structured-data"
-          type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        {/* Metadata is applied server-side */}
         <Script
           id="gtm-script"
           strategy="afterInteractive"
@@ -118,7 +56,6 @@ export default function RootLayout({
             `,
           }}
         />
-
       </head>
       <body>
         <noscript>
@@ -129,13 +66,50 @@ export default function RootLayout({
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
+        <ClientSideContent />
         {children}
-        {deferredPrompt && (
-          <Button onClick={handleInstallClick} className="fixed bottom-4 right-0 left-0 mx-auto z-50 min-w-14 max-w-16">
-            Install
-          </Button>
-        )}
       </body>
     </html>
-  )
+  );
+}
+
+function ClientSideContent() {
+  const [deferredPrompt, setDeferredPrompt] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+    };
+  }, []);
+
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult: { outcome: string }) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+        setDeferredPrompt(null);
+      });
+    }
+  };
+
+  return (
+    <>
+      {deferredPrompt && (
+        <Button onClick={handleInstallClick} className="fixed bottom-4 right-0 left-0 mx-auto z-50 min-w-14 max-w-16">
+          Install
+        </Button>
+      )}
+    </>
+  );
 }
