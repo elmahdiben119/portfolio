@@ -5,13 +5,48 @@ import './globals.css'
 import Script from 'next/script';
 import { useState, useEffect } from 'react'
 import { Button } from './components/ui/button'
-
+import { Metadata } from "next";
 const GTM_ID = 'GTM-TRRM5VK4';
+
+const metadata: Metadata = {
+  title: 'El Mahdi Benbrahim',
+  description: 'El Mahdi Benbrahim is a software engineer specializing in web development, mobile apps, and problem-solving. Explore his skills and projects.',
+  keywords: 'El Mahdi Benbrahim, software engineer, web development, mobile apps, React, Vue, Node.js, TypeScript',
+  authors: [{ name: 'El Mahdi Benbrahim' }],
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://www.elmahdibenbrahim.com',
+    title: 'El Mahdi Benbrahim',
+    description: 'Explore the projects and skills of El Mahdi Benbrahim, a passionate software engineer.',
+    images: [
+      {
+        url: 'https://www.elmahdibenbrahim.com/_next/image?url=%2Fimages%2Felmahdibenbrahim.jpeg&w=640&q=40',
+        width: 1200,
+        height: 630,
+        alt: 'El Mahdi Benbrahim',
+      },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+}
 
 export default function RootLayout({
   children,
+  metadata
 }: {
-  children: React.ReactNode
+  children: React.ReactNode,
+  metadata: Metadata
 }) {
 
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
@@ -63,6 +98,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Metadata */}
         <Script
           id="structured-data"
           type="application/ld+json"
@@ -95,7 +131,7 @@ export default function RootLayout({
         </noscript>
         {children}
         {deferredPrompt && (
-          <Button onClick={handleInstallClick} className="fixed bottom-4 right-4 z-50">
+          <Button onClick={handleInstallClick} className="fixed bottom-4 right-0 left-0 mx-auto z-50 min-w-14 max-w-16">
             Install
           </Button>
         )}
