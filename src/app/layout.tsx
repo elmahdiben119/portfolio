@@ -1,7 +1,5 @@
-// layout.tsx (Server Component)
 import './globals.css';
 import Script from 'next/script';
-import { Button } from './components/ui/button';
 import ClientSideContent from './ClientSideContent';
 
 const GTM_ID = 'GTM-TRRM5VK4';
@@ -43,7 +41,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        {/* Metadata is applied server-side */}
         <Script
           id="gtm-script"
           strategy="afterInteractive"
