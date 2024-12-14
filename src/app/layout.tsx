@@ -1,6 +1,6 @@
 import './globals.css';
 import Script from 'next/script';
-import ClientSideContent from './ClientSideContent';
+// import ClientSideContent from './ClientSideContent';
 
 const GTM_ID = 'GTM-TRRM5VK4';
 
@@ -64,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        <ClientSideContent />
+        {/* <ClientSideContent /> */}
         {children}
       </body>
     </html>
