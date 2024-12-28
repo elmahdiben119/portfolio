@@ -54,6 +54,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `,
           }}
         />
+        <link
+          href="https://assets.calendly.com/assets/external/widget.css"
+          rel="stylesheet"
+        />
       </head>
       <body>
         <noscript>
@@ -66,6 +70,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </noscript>
         {/* <ClientSideContent /> */}
         {children}
+        <Script
+          src="https://assets.calendly.com/assets/external/widget.js"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );
