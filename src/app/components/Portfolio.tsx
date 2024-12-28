@@ -10,7 +10,7 @@ import { useEffect, useState, useRef } from "react"
 import Head from "next/head"
 import { useCookies } from 'react-cookie'
 import { motion } from 'framer-motion'
-import CalendlyBadgeWidget from "./ui/CalendlyBadgeWidget"
+import CalendlyWidget from "./ui/CalendlyBadgeWidget"
 
 export default function Portfolio() {
   const [mounted, setMounted] = useState<boolean>(false)
@@ -681,7 +681,7 @@ export default function Portfolio() {
             </div>
           </div>
         )}
-        <CalendlyBadgeWidget />
+        <CalendlyWidget />
       </div >
     </>
   )
