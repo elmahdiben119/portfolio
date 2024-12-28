@@ -68,7 +68,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        {/* <ClientSideContent /> */}
         {children}
         <Script
           src="https://assets.calendly.com/assets/external/widget.js"
