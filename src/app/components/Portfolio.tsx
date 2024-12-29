@@ -681,8 +681,8 @@ export default function Portfolio() {
             </div>
           </div>
         )}
-        <CalendlyWidget />
       </div >
+      <CalendlyWidget />
     </>
   )
 }
