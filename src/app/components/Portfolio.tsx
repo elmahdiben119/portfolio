@@ -10,7 +10,6 @@ import { useEffect, useState, useRef } from "react"
 import Head from "next/head"
 import { useCookies } from 'react-cookie'
 import { motion } from 'framer-motion'
-import CalendlyWidget from "./ui/CalendlyBadgeWidget"
 
 export default function Portfolio() {
   const [mounted, setMounted] = useState<boolean>(false)
@@ -403,7 +402,7 @@ export default function Portfolio() {
               </nav>
             )}
           </header>
-          <main className="flex-1">
+          <div className="flex-1">
             <motion.section
               className="w-full py-12 md:py-24 lg:py-32 xl:py-48"
               initial={{ opacity: 0, y: 20 }}
@@ -632,7 +631,7 @@ export default function Portfolio() {
                 </form>
               </div>
             </section>
-          </main>
+          </div>
           <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
             <p className="text-xs text-gray-500 dark:text-gray-400">© 2024 El Mahdi Benbrahim. All rights reserved.</p>
             <nav className="sm:ml-auto flex gap-4 sm:gap-6">
@@ -682,7 +681,6 @@ export default function Portfolio() {
           </div>
         )}
       </div >
-      <CalendlyWidget />
     </>
   )
 }
