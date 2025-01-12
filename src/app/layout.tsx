@@ -59,6 +59,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </noscript>
         {children}
         <CalendlyWidget />
+        <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4809710414384113"
+          crossOrigin="anonymous"></Script>
         <Script
           src="https://assets.calendly.com/assets/external/widget.js"
           strategy="lazyOnload"
