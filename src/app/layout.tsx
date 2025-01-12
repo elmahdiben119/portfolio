@@ -1,3 +1,4 @@
+import Ad from './components/Ad';
 import CalendlyWidget from './components/ui/CalendlyBadgeWidget';
 import './globals.css';
 import Script from 'next/script';
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
+        <Ad />
         {children}
         <CalendlyWidget />
         <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4809710414384113"
